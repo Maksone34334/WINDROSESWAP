@@ -1,7 +1,7 @@
 {
   "name": "monorail-mcp-server",
-  "version": "0.1.0",
-  "description": "A Model Context Protocol (MCP) server that allows you to get quotes, trade transactions and token information from Monorail's APIs",
+  "version": "0.2.0",
+  "description": "Enhanced Model Context Protocol (MCP) server with advanced swap integrator for Monorail DEX - featuring improved architecture, error handling, and trading capabilities",
   "main": "index.js",
   "type": "module",
   "bin": {
@@ -9,6 +9,9 @@
   },
   "scripts": {
     "build": "tsc",
+    "start": "node build/server.js",
+    "dev": "tsc && node build/server.js",
+    "vercel-build": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
@@ -16,21 +19,35 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/monorail-xyz/mcp-server.git"
+    "url": "git+https://github.com/maximchebishev/monorail-mcp-server.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "mcp",
+    "monorail",
+    "dex",
+    "swap",
+    "trading",
+    "defi",
+    "blockchain",
+    "monad"
+  ],
+  "author": "Maksim Chebishev <maksim.chebishev@example.com>",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/monorail-xyz/mcp-server/issues"
+    "url": "https://github.com/maximchebishev/monorail-mcp-server/issues"
   },
-  "homepage": "https://github.com/monorail-xyz/mcp-server#readme",
+  "homepage": "https://github.com/maximchebishev/monorail-mcp-server#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1",
     "axios": "^1.8.4",
+    "cors": "^2.8.5",
+    "ethers": "^6.15.0",
+    "express": "^5.1.0",
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/node": "^22.14.1",
     "typescript": "^5.8.3"
   }

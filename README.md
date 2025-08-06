@@ -12,7 +12,7 @@ Alternatively, feel free to open an issue here on GitHub.
 
 ## Setup
 
-To add this MCP server to Claude Desktop (or similar MCP client), you'll need to:
+To add this MCP server to your MCP client, you'll need to:
 
 **1. Clone this repo**
 
@@ -52,4 +52,4 @@ npm run build
 
 ## Usage
 
-Once the server is available within your MCP client (like Claude Desktop), you can simply ask it for token information, balances and get quotes for trades. The quotes will include the transaction data that you can use to execute the trade, however, this MCP server _DOES NOT_ implement wallet functionality to actually execute the transaction.
+Once the server is available within your MCP client, you can simply ask it for token information, balances and get quotes for trades. The quotes will include the transaction data that you can use to execute the trade. This server also includes swap execution functionality for complete trading workflows.

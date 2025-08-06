@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONAD WINDROSE SWAP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .header-logo {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+        }
+
+        @media (max-width: 768px) {
+            .header-logo {
+                max-width: 300px;
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            margin: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255,255,255,0.1);
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            border-radius: 18px;
+            z-index: -1;
+        }
+        
+        
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            -webkit-text-stroke: 0.5px rgba(255,255,255,0.3);
+            text-stroke: 0.5px rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .swap-container {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 0 50px rgba(255,255,255,0.1);
+            position: relative;
+        }
+        
+        .swap-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.02), transparent);
+            border-radius: 18px;
+            z-index: -1;
+        }
+        
+        .section h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+            text-stroke: 1px rgba(255,255,255,0.3);
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            -webkit-text-stroke: 0.5px rgba(255,255,255,0.2);
+            text-stroke: 0.5px rgba(255,255,255,0.2);
+        }
+        
+        .button:hover {
+            background: linear-gradient(135deg, #555 0%, #333 100%);
+            border-color: rgba(255,255,255,0.5);
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .connect-button {
+            background: linear-gradient(135deg, #2a4d3a 0%, #1e3a2e 100%);
+            border-color: rgba(0,255,0,0.3);
+        }
+        
+        .connect-button:hover {
+            background: linear-gradient(135deg, #3d6650 0%, #2a4d3a 100%);
+            border-color: rgba(0,255,0,0.5);
+            box-shadow: 0 0 20px rgba(0,255,0,0.2);
+        }
+        
+        .swap-button {
+            background: linear-gradient(135deg, #4a3d2a 0%, #3a2e1e 100%);
+            border-color: rgba(255,165,0,0.3);
+            font-size: 1.2rem;
+            padding: 20px 40px;
+        }
+        
+        .swap-button:hover {
+            background: linear-gradient(135deg, #665033 0%, #4a3d2a 100%);
+            border-color: rgba(255,165,0,0.5);
+            box-shadow: 0 0 20px rgba(255,165,0,0.2);
+        }
+        
+        .input-group {
+            margin: 20px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            -webkit-text-stroke: 0.5px rgba(255,255,255,0.2);
+            text-stroke: 0.5px rgba(255,255,255,0.2);
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: rgba(255,255,255,0.5);
+            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+        }
+        
+        .result {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .wallet-info {
+            background: linear-gradient(135deg, #1a3d1a 0%, #0d2a0d 100%);
+            border: 2px solid rgba(0,255,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #1a1a3d 0%, #0d0d2a 100%);
+            border: 2px solid rgba(0,100,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            margin: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tech-badge {
+            background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .swap-row {
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .token-input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .token-selector {
+            flex: 1;
+        }
+        
+        .token-selector select {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        
+        .token-balance {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .amount-input {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .amount-input input {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 1.2rem;
+            text-align: right;
+        }
+        
+        .max-button {
+            background: linear-gradient(135deg, #4a3d2a 0%, #3a2e1e 100%);
+            border: 1px solid rgba(255,165,0,0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .max-button:hover {
+            background: linear-gradient(135deg, #665033 0%, #4a3d2a 100%);
+            border-color: rgba(255,165,0,0.5);
+        }
+        
+        .swap-arrow {
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .swap-reverse {
+            background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .swap-reverse:hover {
+            background: linear-gradient(135deg, #555 0%, #333 100%);
+            border-color: rgba(255,255,255,0.5);
+            transform: rotate(180deg);
+        }
+        
+        .swap-info {
+            background: linear-gradient(135deg, #1a1a3d 0%, #0d0d2a 100%);
+            border: 1px solid rgba(0,100,255,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        .info-row span:last-child {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="LOGO_MWS.png" alt="MONAD WINDROSE SWAP" class="header-logo">
+        <p>Decentralized Token Exchange on Monad Blockchain</p>
+    </div>
+
+    <div class="container">
+        <div class="swap-container">
+            <div class="section">
+                <h2>Wallet Connection</h2>
+                
+                <button id="connect-wallet" class="button connect-button" onclick="connectWallet()">Connect MetaMask</button>
+                <button class="button" onclick="addMonadNetwork()">Add Monad Network</button>
+                <button id="disconnect-wallet" class="button" onclick="disconnectWallet()" style="display: none; background: linear-gradient(135deg, #4d2a2a 0%, #3a1e1e 100%); border-color: rgba(255,0,0,0.3);">Disconnect</button>
+                
+                <div id="wallet-info" class="wallet-info"></div>
+                
+                <div class="info-box">
+                    <strong>Setup Instructions:</strong><br>
+                    1. Install MetaMask browser extension<br>
+                    2. Click "Add Monad Network" to configure Monad testnet<br>
+                    3. Get testnet tokens from Monad faucet<br>
+                    4. Connect your wallet and start swapping!
+                </div>
+            </div>
+        </div>
+
+        <div class="swap-container">
+            <div class="section">
+                <h2>Token Swap</h2>
+                
+                <div class="swap-row">
+                    <div class="token-input">
+                        <div class="token-selector">
+                            <select id="from-token" onchange="updateFromToken()">
+                                <option value="">Select token...</option>
+                            </select>
+                            <div id="from-balance" class="token-balance">Balance: --</div>
+                        </div>
+                        <div class="amount-input">
+                            <input type="number" id="from-amount" placeholder="0.0" step="0.01" min="0" oninput="updateQuote()">
+                            <button class="max-button" onclick="setMaxAmount()">MAX</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="swap-arrow">
+                    <button class="swap-reverse" onclick="reverseTokens()">⇅</button>
+                </div>
+                
+                <div class="swap-row">
+                    <div class="token-input">
+                        <div class="token-selector">
+                            <select id="to-token" onchange="updateToToken()">
+                                <option value="">Select token...</option>
+                            </select>
+                            <div id="to-balance" class="token-balance">Balance: --</div>
+                        </div>
+                        <div class="amount-input">
+                            <input type="number" id="to-amount" placeholder="0.0" readonly>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="swap-info" id="swap-info" style="display: none;">
+                    <div class="info-row">
+                        <span>Price Impact:</span>
+                        <span id="price-impact">--</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Minimum Received:</span>
+                        <span id="minimum-received">--</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Gas Estimate:</span>
+                        <span id="gas-estimate">--</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Slippage Tolerance (%)</label>
+                    <input type="number" id="slippage" value="1" step="0.1" min="0.1" max="50" onchange="updateQuote()">
+                </div>
+                
+                <button id="swap-button" class="button swap-button" onclick="executeSwap()" disabled>
+                    Connect Wallet to Swap
+                </button>
+                
+                <div id="result" class="result"></div>
+            </div>
+        </div>
+
+        <div class="swap-container">
+            <div class="section">
+                <h2>Quick Actions</h2>
+                
+                <button class="button" onclick="getTokens()">View Available Tokens</button>
+                <button class="button" onclick="getWalletBalance()">Check Wallet Balance</button>
+                <button class="button" onclick="testQuote()">Test Quote (Demo)</button>
+                
+                <div class="info-box">
+                    <strong>About MONAD WINDROSE SWAP:</strong><br>
+                    A decentralized exchange built on the Monad blockchain, featuring fast transactions, low fees, and seamless token swapping. The eight-pointed star (windrose) symbolizes navigation and direction in the DeFi space.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <svg class="star-icon" viewBox="0 0 100 100" style="width: 30px; height: 30px;">
+            <path d="M50 10 L57 35 L82 35 L62 50 L70 75 L50 60 L30 75 L38 50 L18 35 L43 35 Z"/>
+        </svg>
+        <h3>MONAD WINDROSE SWAP</h3>
+        <div class="tech-stack">
+            <div class="tech-badge">Monad Blockchain</div>
+            <div class="tech-badge">MetaMask Integration</div>
+            <div class="tech-badge">Monorail DEX</div>
+            <div class="tech-badge">Real-time Quotes</div>
+            <div class="tech-badge">Secure Swaps</div>
+        </div>
+        <p style="margin-top: 20px; opacity: 0.8;">
+            Navigate the DeFi winds with precision • Built on Monad
+        </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        // Check if ethers.js loaded properly
+        if (typeof ethers === 'undefined') {
+            console.error('Ethers.js failed to load!');
+            alert('Failed to load Ethers.js library. Please refresh the page.');
+        }
+        
+        let provider = null;
+        let signer = null;
+        let userAccount = null;
+        let allTokens = [];
+        let userBalances = {};
+        let currentQuote = null;
+        
+        // Fallback token list if API fails
+        const FALLBACK_TOKENS = [
+            {symbol: "MON", name: "Monad", address: "0x0000000000000000000000000000000000000000"},
+            {symbol: "WMON", name: "Wrapped Monad", address: "0x760afe86e5de5fa0ee542fc7b7b713e1c5425701"},
+            {symbol: "BEAN", name: "Bean Exchange", address: "0x268e4e24e0051ec27b3d27a95977e71ce6875a05"},
+            {symbol: "CHOG", name: "Chog", address: "0xe0590015a873bf326bd645c3e1266d4db41c4e6b"},
+            {symbol: "ATL", name: "Atlantis", address: "0x1ea9099e3026e0b3f8dd6fbacaa45f30fce67431"},
+            {symbol: "DAK", name: "Molandak", address: "0x0f0bdebf0f83cd1ee3974779bcb7315f9808c714"},
+            {symbol: "HALLI", name: "Halliday", address: "0x6ce1890eeadae7db01026f4b294cb8ec5ecc6563"},
+            {symbol: "gMON", name: "gMON", address: "0xaeef2f6b429cb59c9b2d7bb2141ada993e8571c3"},
+            {symbol: "aprMON", name: "aPriori Monad LST", address: "0xb2f82d0f38dc453d596ad40a37799446cc89274a"},
+            {symbol: "BMONAD", name: "buja Monad", address: "0x3552f8254263ea8880c7f7e25cb8dbbd79c0c4b1"},
+            // Добавьте ваш токен здесь:
+            // {symbol: "YOUR_TOKEN", name: "Your Token Name", address: "0xYOUR_TOKEN_ADDRESS"}
+        ];
+
+        // Monad network configuration
+        const MONAD_NETWORK = {
+            chainId: '0x2C89E', // 183966 in hex
+            chainName: 'Monad Testnet',
+            nativeCurrency: {
+                name: 'MON',
+                symbol: 'MON',
+                decimals: 18
+            },
+            rpcUrls: ['https://testnet-rpc.monad.xyz'],
+            blockExplorerUrls: ['https://testnet-explorer.monad.xyz']
+        };
+
+        // Add Monad network to MetaMask
+        async function addMonadNetwork() {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [MONAD_NETWORK]
+                });
+                showResult('✅ Monad Testnet added to MetaMask successfully!');
+            } catch (error) {
+                console.error('Add network error:', error);
+                if (error.code === 4001) {
+                    showResult('❌ User rejected network addition');
+                } else {
+                    showResult(`❌ Failed to add Monad network: ${error.message}`);
+                }
+            }
+        }
+
+        // Switch to Monad network
+        async function switchToMonad() {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: MONAD_NETWORK.chainId }]
+                });
+                showResult('✅ Switched to Monad Testnet');
+            } catch (error) {
+                if (error.code === 4902) {
+                    // Network not added yet, add it
+                    await addMonadNetwork();
+                } else {
+                    showResult(`❌ Failed to switch network: ${error.message}`);
+                }
+            }
+        }
+
+        // Wallet connection functionality
+        async function connectWallet() {
+            console.log('Connect wallet function called');
+            
+            if (typeof window.ethereum === 'undefined') {
+                showResult('❌ MetaMask not detected. Please install MetaMask extension from https://metamask.io');
+                return false;
+            }
+
+            try {
+                showResult('🔄 Connecting to MetaMask...');
+                
+                // Request account access
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+                
+                if (!accounts || accounts.length === 0) {
+                    showResult('❌ No accounts found. Please unlock MetaMask and try again.');
+                    return false;
+                }
+
+                console.log('Accounts found:', accounts);
+                userAccount = accounts[0];
+
+                // Create ethers provider
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                
+                // Check current network
+                const network = await provider.getNetwork();
+                console.log('Current network:', network);
+                
+                // Monad testnet chain ID is 183966 (0x2C89E)
+                if (network.chainId !== 183966) {
+                    showResult('⚠️ Wrong network detected. Will continue but recommend switching to Monad...');
+                    
+                    try {
+                        // Try to switch to Monad network
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0x2C89E' }]
+                        });
+                        
+                        // Wait a bit for network switch
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        
+                        // Recreate provider after network change
+                        provider = new ethers.providers.Web3Provider(window.ethereum);
+                        signer = provider.getSigner();
+                        
+                    } catch (switchError) {
+                        console.log('Switch error:', switchError);
+                        // If the network doesn't exist, try to add it
+                        if (switchError.code === 4902) {
+                            try {
+                                await addMonadNetwork();
+                                await new Promise(resolve => setTimeout(resolve, 2000));
+                                provider = new ethers.providers.Web3Provider(window.ethereum);
+                                signer = provider.getSigner();
+                            } catch (addError) {
+                                console.log('Failed to add network, continuing with current network');
+                            }
+                        }
+                        // Continue even if network switch fails
+                    }
+                }
+                
+                // Ensure we have a valid signer
+                if (!signer) {
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    signer = provider.getSigner();
+                }
+                
+                // Verify the signer works
+                try {
+                    const signerAddress = await signer.getAddress();
+                    console.log('Signer verified:', signerAddress);
+                } catch (signerError) {
+                    console.error('Signer error:', signerError);
+                    throw new Error('Failed to create signer');
+                }
+                
+                console.log('Wallet connected:', userAccount);
+                await updateWalletUI();
+                showResult(`✅ Wallet connected successfully!\nAddress: ${userAccount}\nNetwork: ${network.name || 'Unknown'}`);
+                return true;
+                
+            } catch (error) {
+                console.error('Wallet connection error:', error);
+                let errorMessage = 'Unknown error';
+                
+                if (error.code === 4001) {
+                    errorMessage = 'Connection rejected by user';
+                } else if (error.code === -32002) {
+                    errorMessage = 'Connection request already pending. Please check MetaMask.';
+                } else if (error.code === -32603) {
+                    errorMessage = 'Internal error. Please try refreshing the page.';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                showResult(`❌ Failed to connect wallet: ${errorMessage}`);
+                return false;
+            }
+        }
+
+        async function disconnectWallet() {
+            provider = null;
+            signer = null;
+            userAccount = null;
+            updateWalletUI();
+            showResult('🔌 Wallet disconnected');
+        }
+
+        async function updateWalletUI() {
+            const connectBtn = document.getElementById('connect-wallet');
+            const disconnectBtn = document.getElementById('disconnect-wallet');
+            const walletInfo = document.getElementById('wallet-info');
+            const swapButton = document.getElementById('swap-button');
+
+            if (userAccount) {
+                connectBtn.style.display = 'none';
+                disconnectBtn.style.display = 'inline-block';
+                walletInfo.style.display = 'block';
+                walletInfo.innerHTML = `
+                    <strong>Connected Wallet:</strong> ${userAccount.slice(0, 6)}...${userAccount.slice(-4)}<br>
+                    <strong>Network:</strong> Monad Testnet
+                `;
+                
+                if (swapButton) {
+                    swapButton.disabled = false;
+                    swapButton.textContent = 'Get Quote';
+                }
+                
+                // Load tokens and balances
+                await loadTokens();
+                await loadUserBalances();
+            } else {
+                connectBtn.style.display = 'inline-block';
+                disconnectBtn.style.display = 'none';
+                walletInfo.style.display = 'none';
+                
+                if (swapButton) {
+                    swapButton.disabled = true;
+                    swapButton.textContent = 'Connect Wallet to Swap';
+                }
+            }
+        }
+
+        // Load all available tokens
+        async function loadTokens() {
+            try {
+                showResult('🔄 Loading available tokens...');
+                const response = await fetch('/api/tokens?limit=100');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success && Array.isArray(data.data)) {
+                    allTokens = data.data;
+                    console.log(`Loaded ${allTokens.length} tokens:`, allTokens.slice(0, 5));
+                    populateTokenSelectors();
+                    showResult(`✅ Loaded ${allTokens.length} tokens successfully`);
+                    return true;
+                } else {
+                    throw new Error(data.error || 'Invalid response format');
+                }
+            } catch (error) {
+                console.error('Failed to load tokens:', error);
+                showResult(`❌ Failed to load tokens: ${error.message}`);
+                
+                // Fallback: load a basic set of tokens
+                allTokens = [
+                    {symbol: 'MON', name: 'Monad', address: '0x0000000000000000000000000000000000000000'},
+                    {symbol: 'BEAN', name: 'Bean Exchange', address: '0x268e4e24e0051ec27b3d27a95977e71ce6875a05'},
+                    {symbol: 'CHOG', name: 'Chog', address: '0xe0590015a873bf326bd645c3e1266d4db41c4e6b'},
+                    {symbol: 'WMON', name: 'Wrapped Monad', address: '0x760afe86e5de5fa0ee542fc7b7b713e1c5425701'}
+                ];
+                populateTokenSelectors();
+                showResult('⚠️ Using fallback token list. Some tokens may not be available.');
+                return false;
+            }
+        }
+
+        // Populate token dropdown selectors
+        function populateTokenSelectors() {
+            const fromSelect = document.getElementById('from-token');
+            const toSelect = document.getElementById('to-token');
+            
+            if (!fromSelect || !toSelect) {
+                console.error('Token selector elements not found');
+                return;
+            }
+            
+            // Clear existing options except first
+            fromSelect.innerHTML = '<option value="">Select token...</option>';
+            toSelect.innerHTML = '<option value="">Select token...</option>';
+            
+            if (!Array.isArray(allTokens) || allTokens.length === 0) {
+                console.warn('No tokens available to populate selectors');
+                return;
+            }
+            
+            console.log('Populating selectors with', allTokens.length, 'tokens');
+            
+            // Sort tokens by symbol for better UX
+            const sortedTokens = [...allTokens].sort((a, b) => a.symbol.localeCompare(b.symbol));
+            
+            sortedTokens.forEach(token => {
+                if (token.symbol && token.name) {
+                    const option1 = new Option(`${token.symbol} - ${token.name}`, token.symbol);
+                    const option2 = new Option(`${token.symbol} - ${token.name}`, token.symbol);
+                    
+                    fromSelect.appendChild(option1);
+                    toSelect.appendChild(option2);
+                }
+            });
+            
+            // Set default tokens if available
+            const hasToken = (symbol) => sortedTokens.some(t => t.symbol === symbol);
+            
+            if (hasToken('MON')) {
+                fromSelect.value = 'MON';
+            }
+            if (hasToken('BEAN')) {
+                toSelect.value = 'BEAN';
+            }
+            
+            console.log('Token selectors populated, from:', fromSelect.value, 'to:', toSelect.value);
+            
+            updateFromToken();
+            updateToToken();
+        }
+
+        // Load user token balances
+        async function loadUserBalances() {
+            if (!userAccount) {
+                console.log('No user account, skipping balance loading');
+                return;
+            }
+            
+            try {
+                showResult('🔄 Loading wallet balances...');
+                const response = await fetch(`/api/wallet/${userAccount}/balances`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success && Array.isArray(data.data)) {
+                    userBalances = {};
+                    data.data.forEach(balance => {
+                        if (balance.symbol && balance.balance !== undefined) {
+                            userBalances[balance.symbol] = parseFloat(balance.balance).toFixed(6);
+                        }
+                    });
+                    
+                    console.log('Loaded balances:', userBalances);
+                    updateBalanceDisplays();
+                    showResult(`✅ Loaded balances for ${data.data.length} tokens`);
+                } else {
+                    throw new Error(data.error || 'Invalid balance response');
+                }
+            } catch (error) {
+                console.error('Failed to load balances:', error);
+                showResult(`❌ Failed to load balances: ${error.message}`);
+                // Set empty balances to prevent errors
+                userBalances = {};
+                updateBalanceDisplays();
+            }
+        }
+
+        // Update balance displays
+        function updateBalanceDisplays() {
+            const fromToken = document.getElementById('from-token').value;
+            const toToken = document.getElementById('to-token').value;
+            
+            const fromBalance = userBalances[fromToken] || '0.00';
+            const toBalance = userBalances[toToken] || '0.00';
+            
+            document.getElementById('from-balance').textContent = `Balance: ${fromBalance}`;
+            document.getElementById('to-balance').textContent = `Balance: ${toBalance}`;
+        }
+
+        // Update from token selection
+        function updateFromToken() {
+            updateBalanceDisplays();
+            updateQuote();
+        }
+
+        // Update to token selection  
+        function updateToToken() {
+            updateBalanceDisplays();
+            updateQuote();
+        }
+
+        // Set maximum amount for from token
+        function setMaxAmount() {
+            const fromToken = document.getElementById('from-token').value;
+            const balance = userBalances[fromToken] || '0';
+            
+            document.getElementById('from-amount').value = balance;
+            updateQuote();
+        }
+
+        // Reverse token selection
+        function reverseTokens() {
+            const fromSelect = document.getElementById('from-token');
+            const toSelect = document.getElementById('to-token');
+            
+            const fromValue = fromSelect.value;
+            const toValue = toSelect.value;
+            
+            fromSelect.value = toValue;
+            toSelect.value = fromValue;
+            
+            updateFromToken();
+            updateToToken();
+        }
+
+        function showResult(text) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = text;
+        }
+
+        async function testEndpoint(endpoint) {
+            showResult('Loading...');
+
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                showResult(`Error: ${error.message}`);
+            }
+        }
+
+        async function getTokens() {
+            await testEndpoint('/api/tokens?limit=10');
+        }
+
+        async function testQuote() {
+            showResult('Testing quote endpoint...');
+
+            const sender = userAccount || "0x1234567890123456789012345678901234567890";
+
+            try {
+                const response = await fetch('/api/quote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        amount: "1",
+                        from: "BEAN",
+                        to: "CHOG",
+                        sender: sender
+                    })
+                });
+                const data = await response.json();
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                showResult(`Error: ${error.message}`);
+            }
+        }
+
+        // Update quote automatically when inputs change
+        let quoteTimeout;
+        async function updateQuote() {
+            clearTimeout(quoteTimeout);
+            
+            const fromToken = document.getElementById('from-token').value;
+            const toToken = document.getElementById('to-token').value;
+            const amount = document.getElementById('from-amount').value;
+            
+            if (!fromToken || !toToken || !amount || amount <= 0 || fromToken === toToken) {
+                document.getElementById('to-amount').value = '';
+                document.getElementById('swap-info').style.display = 'none';
+                currentQuote = null;
+                updateSwapButton();
+                return;
+            }
+            
+            // Debounce quote requests
+            quoteTimeout = setTimeout(async () => {
+                await getQuote();
+            }, 500);
+        }
+
+        async function getQuote() {
+            const fromToken = document.getElementById('from-token').value;
+            const toToken = document.getElementById('to-token').value;
+            const amount = document.getElementById('from-amount').value;
+            const slippage = document.getElementById('slippage').value;
+
+            if (!amount || amount <= 0) {
+                return;
+            }
+
+            if (fromToken === toToken) {
+                showResult('❌ Please select different tokens');
+                return;
+            }
+
+            if (!userAccount) {
+                console.log('No wallet connected, getting quote without sender');
+                // Allow quotes without wallet connection for price discovery
+            }
+
+            try {
+                console.log('Getting quote:', { fromToken, toToken, amount, slippage });
+                
+                const requestBody = {
+                    amount: amount.toString(),
+                    from: fromToken,
+                    to: toToken,
+                    slippage: parseFloat(slippage) * 100
+                };
+                
+                // Only add sender if wallet is connected
+                if (userAccount) {
+                    requestBody.sender = userAccount;
+                }
+
+                const response = await fetch('/api/quote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Quote response:', data);
+                
+                if (data.success && data.data) {
+                    const quote = data.data;
+                    currentQuote = data;
+                    
+                    // Update output amount - check multiple possible fields
+                    const outputAmount = quote.output_formatted || quote.estimatedOutput || quote.outputAmount || '0';
+                    document.getElementById('to-amount').value = parseFloat(outputAmount).toFixed(6);
+                    
+                    // Show swap info
+                    const swapInfo = document.getElementById('swap-info');
+                    const priceImpact = quote.compound_impact || quote.priceImpact || '0';
+                    const minOutput = quote.min_output_formatted || quote.minimumOutput || '0';
+                    
+                    document.getElementById('price-impact').textContent = `${(parseFloat(priceImpact) * 100).toFixed(3)}%`;
+                    document.getElementById('minimum-received').textContent = `${parseFloat(minOutput).toFixed(6)} ${toToken}`;
+                    document.getElementById('gas-estimate').textContent = quote.gas_estimate || quote.gasEstimate || 'Estimated';
+                    swapInfo.style.display = 'block';
+                    
+                    updateSwapButton();
+                    showResult(`✅ Quote: ${parseFloat(outputAmount).toFixed(6)} ${toToken} (${(parseFloat(priceImpact) * 100).toFixed(3)}% impact)`);
+                    
+                } else {
+                    throw new Error(data.error || 'Quote failed');
+                }
+            } catch (error) {
+                console.error('Quote error:', error);
+                showResult(`❌ Quote error: ${error.message}`);
+                document.getElementById('to-amount').value = '';
+                document.getElementById('swap-info').style.display = 'none';
+                currentQuote = null;
+                updateSwapButton();
+            }
+        }
+
+        function updateSwapButton() {
+            const swapButton = document.getElementById('swap-button');
+            
+            if (!userAccount) {
+                swapButton.disabled = true;
+                swapButton.textContent = 'Connect Wallet to Swap';
+                return;
+            }
+            
+            if (!currentQuote) {
+                swapButton.disabled = true;
+                swapButton.textContent = 'Enter Amount';
+                return;
+            }
+            
+            swapButton.disabled = false;
+            swapButton.textContent = 'Execute Swap';
+        }
+
+        // ERC20 ABI for approve function
+        const ERC20_ABI = [
+            "function approve(address spender, uint256 amount) public returns (bool)",
+            "function allowance(address owner, address spender) public view returns (uint256)",
+            "function balanceOf(address account) public view returns (uint256)"
+        ];
+
+        // Check and approve token if needed
+        async function checkAndApproveToken(tokenAddress, spenderAddress, amount) {
+            if (tokenAddress === '0x0000000000000000000000000000000000000000') {
+                // Native token (MON) doesn't need approval
+                return true;
+            }
+
+            try {
+                const tokenContract = new ethers.Contract(tokenAddress, ERC20_ABI, signer);
+                
+                // Check current allowance
+                const allowance = await tokenContract.allowance(userAccount, spenderAddress);
+                const amountBN = ethers.utils.parseEther(amount.toString());
+                
+                console.log('Current allowance:', allowance.toString());
+                console.log('Required amount:', amountBN.toString());
+                
+                if (allowance.lt(amountBN)) {
+                    showResult('🔐 Token approval required. Please approve in MetaMask...');
+                    
+                    // Request approval for a large amount to avoid future approvals
+                    const maxAmount = ethers.constants.MaxUint256;
+                    const approveTx = await tokenContract.approve(spenderAddress, maxAmount);
+                    
+                    showResult('⏳ Waiting for approval confirmation...');
+                    await approveTx.wait();
+                    
+                    showResult('✅ Token approved successfully!');
+                    return true;
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Approval error:', error);
+                throw new Error(`Token approval failed: ${error.message}`);
+            }
+        }
+
+        async function executeSwap() {
+            if (!userAccount) {
+                showResult('❌ Please connect your wallet first');
+                return;
+            }
+
+            if (!signer) {
+                showResult('❌ Wallet not properly connected. Please reconnect your wallet.');
+                console.error('Signer is null, reconnecting...');
+                await connectWallet();
+                return;
+            }
+
+            const fromToken = document.getElementById('from-token').value;
+            const toToken = document.getElementById('to-token').value;
+            const amount = document.getElementById('from-amount').value;
+            const slippage = document.getElementById('slippage').value;
+
+            if (!fromToken || !toToken || !amount) {
+                showResult('❌ Please fill in all swap details');
+                return;
+            }
+
+            showResult('🔄 Getting fresh quote for execution...');
+
+            try {
+                console.log('Executing swap:', { fromToken, toToken, amount, slippage });
+                
+                // Get fresh quote with user's real address for transaction data
+                const response = await fetch('/api/quote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        amount: amount.toString(),
+                        from: fromToken,
+                        to: toToken,
+                        sender: userAccount,
+                        slippage: parseFloat(slippage) * 100
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Quote response for swap:', data);
+
+                if (data.success && data.data) {
+                    let txData = null;
+                    
+                    // Check different possible locations for transaction data
+                    if (data.data.transaction) {
+                        txData = data.data.transaction;
+                    } else if (data.data.quote && data.data.quote.transaction) {
+                        txData = data.data.quote.transaction;
+                    } else if (currentQuote && currentQuote.data && currentQuote.data.transaction) {
+                        txData = currentQuote.data.transaction;
+                        console.log('Using transaction data from current quote');
+                    }
+                    
+                    if (!txData) {
+                        throw new Error('No transaction data available. Please get a fresh quote.');
+                    }
+                    
+                    console.log('Transaction data:', txData);
+                    
+                    // Find token address for approval
+                    const fromTokenData = allTokens.find(token => token.symbol === fromToken);
+                    if (!fromTokenData) {
+                        throw new Error(`Token ${fromToken} not found`);
+                    }
+                    
+                    // Check balance before swap
+                    let hasEnoughBalance = false;
+                    if (fromTokenData.address === '0x0000000000000000000000000000000000000000') {
+                        // Check native token (MON) balance
+                        const balance = await provider.getBalance(userAccount);
+                        const amountBN = ethers.utils.parseEther(amount.toString());
+                        hasEnoughBalance = balance.gte(amountBN);
+                        console.log('Native balance:', balance.toString(), 'Required:', amountBN.toString());
+                    } else {
+                        // Check ERC20 token balance
+                        const tokenContract = new ethers.Contract(fromTokenData.address, ERC20_ABI, signer);
+                        const balance = await tokenContract.balanceOf(userAccount);
+                        const amountBN = ethers.utils.parseEther(amount.toString());
+                        hasEnoughBalance = balance.gte(amountBN);
+                        console.log('Token balance:', balance.toString(), 'Required:', amountBN.toString());
+                    }
+                    
+                    if (!hasEnoughBalance) {
+                        throw new Error(`Insufficient ${fromToken} balance for this swap`);
+                    }
+                    
+                    // Check and approve token if needed
+                    if (fromTokenData.address !== '0x0000000000000000000000000000000000000000') {
+                        await checkAndApproveToken(fromTokenData.address, txData.to, amount);
+                    }
+                    
+                    showResult('💫 Sending swap transaction to MetaMask...');
+                    
+                    // Prepare transaction parameters
+                    const txParams = {
+                        to: txData.to,
+                        data: txData.data,
+                        value: txData.value || '0x0'
+                    };
+                    
+                    // Add gas limit if available, otherwise set a reasonable default
+                    if (txData.gasLimit) {
+                        txParams.gasLimit = txData.gasLimit;
+                    } else if (txData.gas) {
+                        txParams.gasLimit = txData.gas;
+                    } else {
+                        // Set a reasonable gas limit for swaps
+                        txParams.gasLimit = 500000; // 500k gas should be enough for most swaps
+                    }
+                    
+                    console.log('Sending transaction with params:', txParams);
+                    
+                    // Verify signer before sending transaction
+                    if (!signer) {
+                        throw new Error('Signer not available. Please reconnect wallet.');
+                    }
+                    
+                    // Try to send transaction through MetaMask
+                    let tx;
+                    try {
+                        tx = await signer.sendTransaction(txParams);
+                    } catch (gasError) {
+                        console.log('Failed with gas estimation, trying with higher gas limit...');
+                        // If gas estimation fails, try with a higher gas limit
+                        txParams.gasLimit = 800000; // Increase to 800k gas
+                        tx = await signer.sendTransaction(txParams);
+                    }
+
+                    showResult(`🚀 Transaction submitted!
+Hash: ${tx.hash}
+⏳ Waiting for confirmation...`);
+                    
+                    console.log('Transaction sent:', tx);
+                    
+                    // Wait for confirmation
+                    const receipt = await tx.wait();
+                    console.log('Transaction receipt:', receipt);
+                    
+                    showResult(`✅ Swap completed successfully!
+
+📋 Transaction Details:
+Hash: ${receipt.transactionHash}
+Block: ${receipt.blockNumber}
+Gas Used: ${receipt.gasUsed.toString()}
+
+💱 Swap Summary:
+${amount} ${fromToken} → ${toToken}
+✅ Processed on Monad blockchain!`);
+                    
+                    // Clear form and refresh balances
+                    document.getElementById('from-amount').value = '';
+                    document.getElementById('to-amount').value = '';
+                    document.getElementById('swap-info').style.display = 'none';
+                    currentQuote = null;
+                    updateSwapButton();
+                    
+                    // Reload balances after successful swap
+                    setTimeout(async () => {
+                        await loadUserBalances();
+                        showResult('💰 Balances updated after swap!');
+                    }, 3000);
+                    
+                } else {
+                    throw new Error(data.error || 'Swap preparation failed');
+                }
+                
+            } catch (error) {
+                console.error('Swap execution error:', error);
+                
+                let errorMessage = error.message || 'Unknown error';
+                
+                if (error.code === 4001) {
+                    errorMessage = 'Transaction rejected by user';
+                } else if (error.code === -32603) {
+                    errorMessage = 'Internal RPC error - please try again';
+                } else if (error.code === -32000) {
+                    errorMessage = 'Insufficient funds or gas';
+                } else if (error.message && error.message.includes('insufficient funds')) {
+                    errorMessage = 'Insufficient balance for this swap';
+                } else if (error.message && error.message.includes('insufficient allowance')) {
+                    errorMessage = 'Token approval failed. Please try again.';
+                } else if (error.message && error.message.includes('Token approval failed')) {
+                    errorMessage = error.message;
+                } else if (error.code === 'UNPREDICTABLE_GAS_LIMIT') {
+                    errorMessage = 'Gas estimation failed. Please check: 1) You have enough token balance, 2) Token is approved, 3) Network connection is stable. Try reducing the swap amount.';
+                } else if (error.message && error.message.includes('execution reverted')) {
+                    errorMessage = 'Transaction would fail. This usually means insufficient balance, insufficient liquidity, or price has changed significantly.';
+                }
+                
+                showResult(`❌ Swap failed: ${errorMessage}`);
+            }
+        }
+
+        async function getWalletBalance() {
+            if (!userAccount) {
+                showResult('❌ Please connect your wallet first');
+                return;
+            }
+
+            try {
+                await testEndpoint(`/api/wallet/${userAccount}/balances`);
+            } catch (error) {
+                showResult(`Error: ${error.message}`);
+            }
+        }
+
+        // Check if wallet is already connected on page load
+        window.addEventListener('load', async () => {
+            console.log('Page loaded, initializing application...');
+            showResult('🚀 Initializing Monad Windrose Swap...');
+            
+            try {
+                // Load tokens first - this is essential for the app to work
+                const tokensLoaded = await loadTokens();
+                
+                if (!tokensLoaded) {
+                    console.warn('Failed to load tokens from API, using fallback');
+                }
+                
+                // Check for existing wallet connection
+                if (typeof window.ethereum !== 'undefined') {
+                    try {
+                        // Check if already connected
+                        const accounts = await window.ethereum.request({
+                            method: 'eth_accounts'
+                        });
+                        
+                        if (accounts && accounts.length > 0) {
+                            console.log('Found existing connection:', accounts[0]);
+                            provider = new ethers.providers.Web3Provider(window.ethereum);
+                            signer = provider.getSigner();
+                            userAccount = accounts[0];
+                            await updateWalletUI();
+                            showResult('✅ Application initialized. Wallet reconnected automatically.');
+                        } else {
+                            // No wallet connected, but tokens are loaded
+                            showResult('✅ Application ready. Please connect your wallet to start swapping.');
+                        }
+                    } catch (error) {
+                        console.log('No existing wallet connection found:', error);
+                        showResult('✅ Application ready. Please connect your wallet to start swapping.');
+                    }
+                } else {
+                    showResult('⚠️ MetaMask not detected. Please install MetaMask to use this application.');
+                }
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showResult(`❌ Initialization failed: ${error.message}`);
+            }
+        });
+
+        // Handle account changes
+        if (typeof window.ethereum !== 'undefined') {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length === 0) {
+                    disconnectWallet();
+                } else {
+                    userAccount = accounts[0];
+                    updateWalletUI();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

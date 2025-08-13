@@ -343,6 +343,9 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            pointer-events: auto;
+            position: relative;
+            z-index: 1;
         }
         
         .currency-selector:hover {
@@ -502,6 +505,9 @@
             transition: all 0.3s ease;
             width: 100%;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            pointer-events: auto;
+            position: relative;
+            z-index: 1;
         }
         
         .main-swap-button:hover:not(:disabled) {
@@ -994,6 +1000,47 @@
             20%, 100% {
                 left: 100%;
             }
+        }
+        
+        .connect-button {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .connect-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #FF6B6B 0%, #ee5a52 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+            pointer-events: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
         }
         
         /* Mobile Responsive */
@@ -2484,6 +2531,57 @@
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Monorail DEX Interface loaded');
+            
+            // Убеждаемся что все обработчики событий работают
+            setupEventListeners();
+            
+            try {
+                checkWalletConnection();
+                loadTokens();
+                createAnimatedBackground();
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
+        });
+
+        // Функция для настройки обработчиков событий
+        function setupEventListeners() {
+            // Обработчики для селекторов токенов
+            const fromSelector = document.querySelector('.currency-selector[onclick*="from"]');
+            const toSelector = document.querySelector('.currency-selector[onclick*="to"]');
+            
+            if (fromSelector) {
+                fromSelector.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleTokenSelector('from');
+                });
+            }
+            
+            if (toSelector) {
+                toSelector.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleTokenSelector('to');
+                });
+            }
+            
+            // Обработчик для кнопки подключения кошелька
+            const connectBtn = document.getElementById('connect-wallet');
+            if (connectBtn) {
+                connectBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    connectWallet();
+                });
+            }
+            
+            console.log('✅ Event listeners setup complete');
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
             // Initialize app on page load
             window.addEventListener('load', async () => {
                 console.log('Page loaded, initializing application...');
@@ -2578,6 +2676,20 @@
                 }
             }
         });
+
+        // Функция для принудительного включения кликов
+        function enableClicks() {
+            const clickableElements = document.querySelectorAll('.currency-selector, .main-swap-button, .connect-wallet-btn, .test-button');
+            clickableElements.forEach(element => {
+                element.style.pointerEvents = 'auto';
+                element.style.position = 'relative';
+                element.style.zIndex = '10';
+            });
+            console.log('✅ Clicks enabled for all buttons');
+        }
+
+        // Вызываем функцию включения кликов через небольшую задержку
+        setTimeout(enableClicks, 100);
     </script>
 </body>
 </html>

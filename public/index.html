@@ -2469,6 +2469,20 @@
                 background.appendChild(line);
             }
         });
+        
+        // Close modal when clicking outside or pressing ESC
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('token-modal');
+            if (e.target === modal) {
+                closeTokenModal();
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeTokenModal();
+            }
+        });
     </script>
 </body>
 </html>

@@ -41,25 +41,6 @@ const asyncHandler = (fn: Function) => (req: any, res: any, next: any) => {
     Promise.resolve(fn(req, res, next)).catch(next);
 };
 
-// Health check
-app.get('/', (req, res) => {
-    res.json({
-        name: 'Monorail DEX API',
-        version: '0.2.0',
-        author: 'Maksim Chebishev',
-        description: 'Enhanced API server for Monorail DEX with swap integrator',
-        endpoints: {
-            'GET /api/tokens': 'Get all tokens with optional filtering',
-            'GET /api/tokens/category/:category': 'Get tokens by category',
-            'GET /api/tokens/:address': 'Get token by contract address',
-            'GET /api/tokens/count': 'Get total token count',
-            'GET /api/wallet/:address/balances': 'Get wallet balances',
-            'POST /api/quote': 'Get swap quote',
-            'POST /api/swap': 'Execute swap'
-        }
-    });
-});
-
 // GET /api/tokens - Get all tokens with optional filtering
 app.get('/api/tokens', asyncHandler(async (req: any, res: any) => {
     try {

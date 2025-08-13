@@ -1202,23 +1202,26 @@
         }
 
         function toggleTokenSelector(type) {
-            const select = document.getElementById(type + '-token');
-            // Make select visible and trigger focus to open dropdown
-            select.style.opacity = '1';
-            select.style.pointerEvents = 'auto';
-            select.style.position = 'relative';
-            select.focus();
-            select.click();
-        
-        let provider = null;
-        let signer = null;
-        let userAccount = null;
-        let allTokens = [];
-        let userBalances = {};
-        let currentQuote = null;
-        let currentModalType = null; // 'from' or 'to'
-        let tokenLogos = {}; // Cache for token logos
-        
+            const modal = document.getElementById('token-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const searchInput = document.getElementById('token-search');
+            
+            // Set the modal type and title
+            modal.dataset.type = type;
+            modalTitle.textContent = type === 'from' ? 'Select Token to Pay' : 'Select Token to Receive';
+            
+            // Show modal
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            
+            // Focus search input
+            setTimeout(() => {
+                searchInput.focus();
+            }, 100);
+            
+            // Populate with tokens
+            populateTokenModal();
+        }
         // Fallback token list if API fails
         const FALLBACK_TOKENS = [
             {symbol: "MON", name: "Monad", address: "0x0000000000000000000000000000000000000000"},

@@ -1796,6 +1796,59 @@
             }
         }
 
+        // Check wallet connection status
+        async function checkWalletConnection() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    if (accounts.length > 0) {
+                        currentAccount = accounts[0];
+                        updateWalletUI();
+                        return true;
+                    }
+                } catch (error) {
+                    console.error('Error checking wallet connection:', error);
+                }
+            }
+            return false;
+        }
+
+        // Update wallet UI
+        function updateWalletUI() {
+            const connectBtn = document.getElementById('connect-wallet');
+            const walletInfo = document.getElementById('wallet-info');
+            const swapButton = document.getElementById('swap-button');
+
+            if (userAccount) {
+                connectBtn.textContent = `${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`;
+                connectBtn.classList.add('connected');
+                
+                walletInfo.classList.remove('hidden');
+                walletInfo.innerHTML = `
+                    <strong>Connected:</strong> ${userAccount.slice(0, 6)}...${userAccount.slice(-4)}<br>
+                    <strong>Network:</strong> Monad Testnet
+                `;
+                
+                if (swapButton) {
+                    swapButton.disabled = false;
+                    swapButton.textContent = 'Get Quote';
+                }
+                
+                await loadTokens();
+                await loadUserBalances();
+            } else {
+                connectBtn.textContent = 'Connect Wallet';
+                connectBtn.classList.remove('connected');
+                
+                walletInfo.classList.add('hidden');
+                
+                if (swapButton) {
+                    swapButton.disabled = true;
+                    swapButton.textContent = 'Connect Wallet';
+                }
+            }
+        }
+
         // Wallet connection functionality
         async function connectWallet() {
             console.log('Connect wallet function called');

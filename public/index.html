@@ -1711,6 +1711,46 @@
 
         // Wallet connection functionality
         async function connectWallet() {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('MetaMask is not installed. Please install MetaMask to continue.');
+                    return;
+                }
+
+                // Request account access
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+
+                if (accounts.length === 0) {
+                    alert('No accounts found. Please unlock MetaMask.');
+                    return;
+                }
+
+                currentAccount = accounts[0];
+                
+                // Update UI
+                document.getElementById('connectWalletBtn').textContent = 
+                    `Connected: ${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}`;
+                document.getElementById('connectWalletBtn').disabled = true;
+                
+                // Show wallet-dependent buttons
+                document.getElementById('myBalanceBtn').style.display = 'inline-block';
+                document.getElementById('executeSwapBtn').style.display = 'inline-block';
+
+                console.log('Wallet connected:', currentAccount);
+                
+                // Try to switch to Monad network
+                await addMonadNetwork();
+                
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+                alert('Failed to connect wallet: ' + error.message);
+            }
+        }
+
+        // Wallet connection functionality
+        async function connectWallet() {
             console.log('Connect wallet function called');
             
             if (typeof window.ethereum === 'undefined') {
@@ -2442,11 +2482,102 @@
             }
         });
 
-        // Initialize app on page load
-        window.addEventListener('load', async () => {
-            console.log('Page loaded, initializing application...');
-            showResult('🚀 Initializing Monad Windrose Swap...');
-            
-            try {
-                const tokensLoaded = await loadTokens();
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize app on page load
+            window.addEventListener('load', async () => {
+                console.log('Page loaded, initializing application...');
+                showResult('🚀 Initializing Monad Windrose Swap...');
                 
+                try {
+                    const tokensLoaded = await loadTokens();
+                    
+                    // Create animated background particles
+                    createAnimatedBackground();
+                    
+                    // Auto-connect if wallet was previously connected
+                    if (window.ethereum && window.ethereum.selectedAddress) {
+                        console.log('Auto-connecting to previously connected wallet...');
+                        await connectWallet();
+                    } else {
+                        showResult('💫 Ready to swap! Connect your wallet to get started.');
+                    }
+                    
+                } catch (error) {
+                    console.error('Initialization error:', error);
+                    showResult(`❌ Initialization failed: ${error.message}`);
+                }
+            });
+
+            // Listen for account changes
+            if (window.ethereum) {
+                window.ethereum.on('accountsChanged', async (accounts) => {
+                    console.log('Accounts changed:', accounts);
+                    if (accounts.length === 0) {
+                        userAccount = null;
+                        provider = null;
+                        signer = null;
+                        userBalances = {};
+                        await updateWalletUI();
+                        showResult('👋 Wallet disconnected');
+                    } else if (accounts[0] !== userAccount) {
+                        userAccount = accounts[0];
+                        if (provider) {
+                            signer = provider.getSigner();
+                            await updateWalletUI();
+                            showResult(`🔄 Switched to account: ${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`);
+                        }
+                    }
+                });
+
+                window.ethereum.on('chainChanged', (chainId) => {
+                    console.log('Chain changed:', chainId);
+                    showResult('🔄 Network changed. Please refresh the page if needed.');
+                    // Optionally reload the page
+                    // window.location.reload();
+                });
+            }
+
+            // Create animated background particles
+            function createAnimatedBackground() {
+                const background = document.getElementById('animationBackground');
+                if (!background) return;
+                
+                // Clear existing particles
+                background.innerHTML = '';
+                
+                // Create particles
+                for (let i = 0; i < 50; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = Math.random() > 0.7 ? 'particle particle-large' : 'particle';
+                    
+                    // Random starting position
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 20 + 's';
+                    particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                    
+                    background.appendChild(particle);
+                }
+                
+                // Create connection lines
+                for (let i = 0; i < 10; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'connection-line';
+                    
+                    const width = 100 + Math.random() * 200;
+                    const height = 1;
+                    
+                    line.style.width = width + 'px';
+                    line.style.height = height + 'px';
+                    line.style.left = Math.random() * 100 + '%';
+                    line.style.top = Math.random() * 100 + '%';
+                    line.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    line.style.animationDelay = Math.random() * 3 + 's';
+                    
+                    background.appendChild(line);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

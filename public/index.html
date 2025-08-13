@@ -1786,9 +1786,6 @@
             console.log('Page loaded, initializing application...');
             showResult('🚀 Initializing Monad Windrose Swap...');
             
-            // Preload token logos for better UX
-            preloadTokenLogos();
-            
             try {
                 const tokensLoaded = await loadTokens();
                 

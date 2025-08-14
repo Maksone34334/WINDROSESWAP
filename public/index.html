@@ -265,6 +265,21 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        .swap-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xMDAgMEwxMTUuNDUgNTQuNTVMMTcwIDcwTDExNS40NSA4NS40NUwxMDAgMTQwTDg0LjU1IDg1LjQ1TDMwIDcwTDg0LjU1IDU0LjU1TDEwMCAwWiIgZmlsbD0iIzMzMyIgZmlsbC1vcGFjaXR5PSIwLjMiLz4KPC9zdmc+');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 150px 150px;
+            z-index: -1;
+            pointer-events: none;
+        }
         
         .swap-card:hover {
             transform: translateY(-5px);

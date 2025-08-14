@@ -250,6 +250,296 @@
             z-index: 5;
         }
         
+        /* Decorative Stars */
+        .decorative-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 24px;
+            user-select: none;
+        }
+
+        .star-top-left {
+            top: 80px;
+            left: 120px;
+        }
+
+        .star-top-right {
+            top: 80px;
+            right: 120px;
+        }
+
+        .star-bottom-left {
+            bottom: 200px;
+            left: 180px;
+        }
+
+        .star-bottom-right {
+            bottom: 200px;
+            right: 180px;
+        }
+
+        /* Swap Title */
+        .swap-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .swap-title h1 {
+            color: white;
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Swap Interface */
+        .swap-interface {
+            max-width: 540px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Token Card */
+        .token-card {
+            background: #1a1a1a;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s ease;
+        }
+
+        .token-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .token-card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .token-left {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .token-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 12px;
+            transition: background 0.2s ease;
+        }
+
+        .token-selector:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .token-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .token-symbol {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .dropdown-arrow {
+            color: #888;
+        }
+
+        .token-balance {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .max-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #00d4ff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .max-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+        }
+
+        .token-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .amount-input {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 32px;
+            font-weight: 600;
+            text-align: right;
+            outline: none;
+            width: 200px;
+        }
+
+        .amount-input::placeholder {
+            color: #555;
+        }
+
+        .token-price {
+            color: #888;
+            font-size: 16px;
+        }
+
+        /* Swap Arrow */
+        .swap-arrow-container {
+            display: flex;
+            justify-content: center;
+            margin: -6px 0;
+            z-index: 2;
+            position: relative;
+        }
+
+        .swap-arrow-btn {
+            width: 48px;
+            height: 48px;
+            background: #2a2a2a;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #888;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .swap-arrow-btn:hover {
+            background: #333;
+            border-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .swap-arrow-btn:active {
+            transform: rotate(180deg);
+            transition: transform 0.3s ease;
+        }
+
+        /* Exchange Rate */
+        .exchange-rate {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin: 20px 0;
+        }
+
+        /* Swap Button */
+        .swap-button {
+            width: 100%;
+            background: linear-gradient(135deg, #b8860b, #daa520);
+            border: none;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 18px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+        }
+
+        .swap-button:hover {
+            background: linear-gradient(135deg, #daa520, #ffd700);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(218, 165, 32, 0.3);
+        }
+
+        .swap-button:active {
+            transform: translateY(0);
+        }
+
+        .swap-button:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Progress Info */
+        .progress-info {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 16px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .swap-interface {
+                margin: 0 20px;
+            }
+
+            .token-card {
+                padding: 20px;
+            }
+
+            .token-card-content {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .token-right {
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .amount-input {
+                width: 100%;
+                text-align: left;
+            }
+
+            .star {
+                display: none;
+            }
+        }
+
         /* Swap card styles */
         .swap-card {
             background-color: rgba(20, 20, 20, 0.8);
@@ -439,30 +729,6 @@
             margin-top: 5px;
             font-weight: 500;
             width: 100%;
-        }
-        
-        .max-btn {
-            background: #000;
-            color: white;
-            border: 1px solid #fff;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-left: 8px;
-        }
-        
-        .max-btn:hover {
-            background: #222;
-        }
-        
-        .swap-button {
-            display: flex;
-            justify-content: center;
-            margin-top: 5px;
-            margin-bottom: 5px;
         }
         
         .convert-icon {
@@ -931,20 +1197,6 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        .token-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            margin-right: 12px;
-        }
-
         .token-info {
             flex: 1;
         }
@@ -954,11 +1206,6 @@
             font-weight: 500;
             font-size: 16px;
             margin-bottom: 2px;
-        }
-
-        .token-symbol {
-            color: #888;
-            font-size: 14px;
         }
 
         .token-balance {
@@ -1027,113 +1274,90 @@
     </header>
     
     <main>
-        <div class="background-lines">
-            <div class="line line-1"></div>
-            <div class="line line-2"></div>
+        <!-- Decorative stars -->
+        <div class="decorative-stars">
+            <div class="star star-top-left">✦</div>
+            <div class="star star-top-right">✦</div>
+            <div class="star star-bottom-left">✦</div>
+            <div class="star star-bottom-right">✦</div>
         </div>
-        
-        <div class="swap-card">
-            <div class="glass-reflection"></div>
-            
-            <!-- Wallet Info -->
-            <div id="wallet-info" class="wallet-info hidden"></div>
-            
-            <div class="swap-nav">
-                <button class="swap-nav-item active">Swap</button>
-                <button class="swap-nav-item">Exchange</button>
-                <button class="swap-nav-item" onclick="toggleSettings()">Settings</button>
+
+        <!-- Swap Title -->
+        <div class="swap-title">
+            <h1>Swap</h1>
+        </div>
+
+        <!-- Swap Interface -->
+        <div class="swap-interface">
+            <!-- From Token Card -->
+            <div class="token-card">
+                <div class="token-card-content">
+                    <div class="token-left">
+                        <div class="token-selector" onclick="openTokenPopup('from')">
+                            <div class="token-icon" id="from-icon">M</div>
+                            <span class="token-symbol" id="from-symbol">MON</span>
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <div class="token-balance">
+                            <span>Balance: </span>
+                            <span id="from-balance">0.0000 MON</span>
+                            <button class="max-btn" onclick="setMaxAmount()">Max</button>
+                        </div>
+                    </div>
+                    <div class="token-right">
+                        <input type="number" id="from-amount" placeholder="0.00" class="amount-input">
+                        <div class="token-price" id="from-price">≈$ 0.00</div>
+                    </div>
+                </div>
             </div>
-            
-            <!-- Settings Panel -->
-            <div id="settings-panel" class="settings-panel hidden">
-                <div class="settings-row">
-                    <span>Slippage Tolerance (%)</span>
-                    <input type="number" id="slippage" class="slippage-input" value="1" step="0.1" min="0.1" max="50" onchange="updateQuote()">
-                </div>
-                <div class="settings-row">
-                    <span>Transaction Deadline</span>
-                    <span>20 minutes</span>
+
+            <!-- Swap Arrow Button -->
+            <div class="swap-arrow-container">
+                <button class="swap-arrow-btn" onclick="swapTokens()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M7 3L7 17M7 17L12 12M7 17L2 12" stroke="currentColor" stroke-width="2"/>
+                        <path d="M13 17L13 3M13 3L8 8M13 3L18 8" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- To Token Card -->
+            <div class="token-card">
+                <div class="token-card-content">
+                    <div class="token-left">
+                        <div class="token-selector" onclick="openTokenPopup('to')">
+                            <div class="token-icon" id="to-icon">B</div>
+                            <span class="token-symbol" id="to-symbol">BEAN</span>
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <div class="token-balance">
+                            <span>Balance: </span>
+                            <span id="to-balance">0.0000 BEAN</span>
+                        </div>
+                    </div>
+                    <div class="token-right">
+                        <input type="number" id="to-amount" placeholder="0.00" class="amount-input" readonly>
+                        <div class="token-price" id="to-price">≈$ 0.00</div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="swap-form">
-                <div class="swap-section">
-                    <div class="swap-label">You Pay</div>
-                    <div class="swap-currency">
-                        <div class="currency-selector">
-                            <span class="currency-symbol" id="from-symbol">MON</span>
-                            <button class="token-selector-btn" id="from-token-btn" onclick="openTokenPopup('from')">
-                                <span>Select Token</span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                                    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="amount-container">
-                            <div class="amount-input-wrapper">
-                                <input type="number" id="from-amount" class="swap-amount" placeholder="0.00" step="0.01" min="0" oninput="updateQuote()">
-                                <button class="max-btn" onclick="setMaxAmount()">MAX</button>
-                            </div>
-                            <div class="swap-balance" id="from-balance">Balance: 0.00</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="swap-button">
-                    <div class="convert-icon" onclick="reverseTokens()"><i class="fas fa-exchange-alt"></i></div>
-                </div>
-                
-                <div class="swap-section">
-                    <div class="swap-label">You Receive</div>
-                    <div class="swap-currency">
-                        <div class="currency-selector">
-                            <span class="currency-symbol" id="to-symbol">BEAN</span>
-                            <button class="token-selector-btn" id="to-token-btn" onclick="openTokenPopup('to')">
-                                <span>Select Token</span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                                    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="amount-container">
-                            <div class="amount-input-wrapper">
-                                <input type="number" id="to-amount" class="swap-amount" placeholder="0.00" readonly>
-                            </div>
-                            <div class="swap-balance" id="to-balance">Balance: 0.00</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Swap Info -->
-                <div id="swap-info" class="swap-info hidden">
-                    <div class="info-row">
-                        <span class="info-label">Price Impact:</span>
-                        <span class="info-value" id="price-impact">--</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Minimum Received:</span>
-                        <span class="info-value" id="minimum-received">--</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Gas Estimate:</span>
-                        <span class="info-value" id="gas-estimate">--</span>
-                    </div>
-                </div>
-                
-                <!-- Exchange Rate -->
-                <div class="swap-total">
-                    <span id="exchange-rate">1 MON = 0.00 BEAN</span>
-                    <span><i class="fas fa-info-circle"></i></span>
-                </div>
-                
-                <div class="swap-action">
-                    <button id="swap-button" class="main-swap-button" onclick="executeSwap()" disabled>
-                        Connect Wallet
-                    </button>
-                </div>
-                
-                <!-- Result -->
-                <div id="result" class="result hidden"></div>
+
+            <!-- Exchange Rate -->
+            <div class="exchange-rate" id="exchange-rate">
+                1 MON = 0.0000 BEAN
+            </div>
+
+            <!-- Swap Button -->
+            <button class="swap-button" id="swap-btn" onclick="executeSwap()">
+                Swap
+            </button>
+
+            <div class="progress-info" id="progress-info" style="display: none;">
+                🧪 Initializing Monad Windrose Swap...
             </div>
         </div>
     </main>
@@ -1234,9 +1458,15 @@
         let currentQuote = null;
         let currentSwapType = 'from';
         let selectedTokens = {
-            from: { address: '0x0000000000000000000000000000000000000000', symbol: 'MON', name: 'Monad' },
-            to: { address: '0x268e4e24e0051ec27b3d27a95977e71ce6875a05', symbol: 'BEAN', name: 'Bean Token' }
+            from: { address: '0x0000000000000000000000000000000000000000', symbol: 'MON', name: 'Monad', icon: 'M' },
+            to: { address: '0x268e4e24e0051ec27b3d27a95977e71ce6875a05', symbol: 'BEAN', name: 'Bean Token', icon: 'B' }
         };
+
+        function setMaxAmount() {
+            // This would set the max available balance
+            document.getElementById('from-amount').value = '2.8989';
+            updateQuote();
+        }
 
         function openTokenPopup(type) {
             currentSwapType = type;
@@ -1251,11 +1481,12 @@
         }
 
         function selectToken(address, symbol, name) {
-            selectedTokens[currentSwapType] = { address, symbol, name };
+            const icon = symbol.charAt(0);
+            selectedTokens[currentSwapType] = { address, symbol, name, icon };
             
-            // Update the button text and symbol
+            // Update the UI
             document.getElementById(`${currentSwapType}-symbol`).textContent = symbol;
-            document.getElementById(`${currentSwapType}-token-btn`).querySelector('span').textContent = symbol;
+            document.getElementById(`${currentSwapType}-icon`).textContent = icon;
             
             closeTokenPopup();
             
@@ -1279,6 +1510,20 @@
                     item.style.display = 'none';
                 }
             });
+        }
+
+        function swapTokens() {
+            const temp = selectedTokens.from;
+            selectedTokens.from = selectedTokens.to;
+            selectedTokens.to = temp;
+            
+            // Update UI
+            document.getElementById('from-symbol').textContent = selectedTokens.from.symbol;
+            document.getElementById('from-icon').textContent = selectedTokens.from.icon;
+            document.getElementById('to-symbol').textContent = selectedTokens.to.symbol;
+            document.getElementById('to-icon').textContent = selectedTokens.to.icon;
+            
+            updateQuote();
         }
 
         // Close popup when pressing Escape
@@ -1695,14 +1940,6 @@
             const toToken = document.getElementById('to-token').value;
             updateTokenDisplay('to', toToken);
             updateBalanceDisplays();
-            updateQuote();
-        }
-
-        function setMaxAmount() {
-            const fromToken = document.getElementById('from-token').value;
-            const balance = userBalances[fromToken] || '0';
-            
-            document.getElementById('from-amount').value = balance;
             updateQuote();
         }
 

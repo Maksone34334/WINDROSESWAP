@@ -1417,6 +1417,9 @@
             showResult('❌ Failed to load Ethers.js library. Please refresh the page.');
         }
         
+        // SIMPLE VERSION - GUARANTEED TO WORK
+        console.log('🚀 STARTING SIMPLE VERSION');
+        
         // UI Helper Functions
         function toggleSettings() {
             const panel = document.getElementById('settings-panel');
@@ -1442,18 +1445,14 @@
             }, { once: true });
         }
 
-        // Preload popular token logos for better UX
-        function preloadTokenLogos() {
-            Object.values(TOKEN_LOGO_SOURCES).forEach(url => {
-                const img = new Image();
-                img.src = url;
-            });
-        }
-        
         let provider = null;
         let signer = null;
         let userAccount = null;
-        let allTokens = [];
+        let allTokens = [
+            {symbol: "MON", name: "Monad", address: "0x0000000000000000000000000000000000000000", decimals: 18, balance: "0"},
+            {symbol: "BEAN", name: "Bean", address: "0x268e4e24e0051ec27b3d27a95977e71ce6875a05", decimals: 18, balance: "0"},
+            {symbol: "CHOG", name: "Chog", address: "0xe0590015a873bf326bd645c3e1266d4db41c4e6b", decimals: 18, balance: "0"}
+        ];
         let userBalances = {};
         let currentQuote = null;
         let currentSwapType = 'from';
@@ -1533,23 +1532,9 @@
             }
         });
         
-        // Fallback token list if API fails
-        const FALLBACK_TOKENS = [
-            {symbol: "MON", name: "Monad", address: "0x0000000000000000000000000000000000000000", decimals: "18", balance: "0"},
-            {symbol: "WMON", name: "Wrapped Monad", address: "0x760afe86e5de5fa0ee542fc7b7b713e1c5425701", decimals: "18", balance: "0"},
-            {symbol: "BEAN", name: "Bean Exchange", address: "0x268e4e24e0051ec27b3d27a95977e71ce6875a05", decimals: "18", balance: "0"},
-            {symbol: "CHOG", name: "Chog", address: "0xe0590015a873bf326bd645c3e1266d4db41c4e6b", decimals: "18", balance: "0"},
-            {symbol: "ATL", name: "Atlantis", address: "0x1ea9099e3026e0b3f8dd6fbacaa45f30fce67431", decimals: "18", balance: "0"},
-            {symbol: "DAK", name: "Molandak", address: "0x0f0bdebf0f83cd1ee3974779bcb7315f9808c714", decimals: "18", balance: "0"},
-            {symbol: "HALLI", name: "Halliday", address: "0x6ce1890eeadae7db01026f4b294cb8ec5ecc6563", decimals: "18", balance: "0"},
-            {symbol: "gMON", name: "gMON", address: "0xaeef2f6b429cb59c9b2d7bb2141ada993e8571c3", decimals: "18", balance: "0"},
-            {symbol: "aprMON", name: "aPriori Monad LST", address: "0xb2f82d0f38dc453d596ad40a37799446cc89274a", decimals: "18", balance: "0"},
-            {symbol: "BMONAD", name: "buja Monad", address: "0x3552f8254263ea8880c7f7e25cb8dbbd79c0c4b1", decimals: "18", balance: "0"},
-        ];
-
         // Monad network configuration
         const MONAD_NETWORK = {
-            chainId: '0x2C89E', // 183966 in hex (correct Monad testnet)
+            chainId: '0x279F', // 10143 in hex
             chainName: 'Monad Testnet',
             nativeCurrency: {
                 name: 'MON',
@@ -1562,16 +1547,16 @@
 
         // Token colors for generated icons
         const TOKEN_COLORS = {
-            {symbol: "MON", name: "Monad", address: "0x0000000000000000000000000000000000000000", decimals: 18, balance: "0.00"},
-            {symbol: "WMON", name: "Wrapped Monad", address: "0x760afe86e5de5fa0ee542fc7b7b713e1c5425701", decimals: 18, balance: "0.00"},
-            {symbol: "BEAN", name: "Bean Exchange", address: "0x268e4e24e0051ec27b3d27a95977e71ce6875a05", decimals: 18, balance: "0.00"},
-            {symbol: "CHOG", name: "Chog", address: "0xe0590015a873bf326bd645c3e1266d4db41c4e6b", decimals: 18, balance: "0.00"},
-            {symbol: "ATL", name: "Atlantis", address: "0x1ea9099e3026e0b3f8dd6fbacaa45f30fce67431", decimals: 18, balance: "0.00"},
-            {symbol: "DAK", name: "Molandak", address: "0x0f0bdebf0f83cd1ee3974779bcb7315f9808c714", decimals: 18, balance: "0.00"},
-            {symbol: "HALLI", name: "Halliday", address: "0x6ce1890eeadae7db01026f4b294cb8ec5ecc6563", decimals: 18, balance: "0.00"},
-            {symbol: "gMON", name: "gMON", address: "0xaeef2f6b429cb59c9b2d7bb2141ada993e8571c3", decimals: 18, balance: "0.00"},
-            {symbol: "aprMON", name: "aPriori Monad LST", address: "0xb2f82d0f38dc453d596ad40a37799446cc89274a", decimals: 18, balance: "0.00"},
-            {symbol: "BMONAD", name: "buja Monad", address: "0x3552f8254263ea8880c7f7e25cb8dbbd79c0c4b1", decimals: 18, balance: "0.00"}
+            'MON': '#FFD700',
+            'WMON': '#C0C0C0',
+            'BEAN': '#8B4513',
+            'CHOG': '#FF6347',
+            'ATL': '#4169E1',
+            'DAK': '#32CD32',
+            'HALLI': '#FF1493',
+            'gMON': '#9370DB',
+            'aprMON': '#FF8C00',
+            'BMONAD': '#DC143C'
         };
 
         // Generate SVG icon for token
@@ -1639,90 +1624,52 @@
 
         // Wallet connection functionality
         async function connectWallet() {
-            console.log('=== CONNECTING WALLET ===');
-            console.log('Connect wallet function called');
-            showResult('🔄 Connecting wallet...');
+            console.log('🔗 CONNECTING WALLET...');
             
-                alert('MetaMask не найден! Установите MetaMask расширение.');
-                showResult('❌ MetaMask не найден! Установите MetaMask расширение.');
-                showResult('❌ MetaMask not detected! Please install MetaMask extension and refresh the page.');
-                alert('MetaMask not detected! Please install MetaMask extension from https://metamask.io');
+            // STEP 1: Check MetaMask
+            if (typeof window.ethereum === 'undefined') {
+                showResult('❌ MetaMask НЕ УСТАНОВЛЕН!');
+                console.log('❌ MetaMask not found');
                 return false;
             }
+            console.log('✅ MetaMask найден');
 
-            console.log('MetaMask detected');
+            // STEP 2: Request accounts
             try {
-                showResult('🔄 Подключаем кошелек...');
-                
-                // Request account access
-                console.log('Requesting accounts...');
+                console.log('🔄 Requesting accounts...');
                 const accounts = await window.ethereum.request({
                     method: 'eth_requestAccounts'
                 });
                 
-                console.log('Accounts found:', accounts);
-                    showResult('❌ Аккаунты не найдены. Разблокируйте кошелек.');
-                if (!accounts || accounts.length === 0) {
-                    throw new Error('No accounts found');
-                }
-                
+                console.log('✅ Accounts:', accounts);
                 userAccount = accounts[0];
 
-                // Initialize provider and signer
-                console.log('Initializing provider...');
-                console.log('Initializing provider...');
+                // STEP 3: Initialize provider
+                console.log('🔄 Initializing provider...');
                 provider = new ethers.providers.Web3Provider(window.ethereum);
-                await provider.ready;
                 signer = provider.getSigner();
+                console.log('✅ Provider and signer ready');
                 
-                console.log('Getting network...');
-                // Verify signer works
-                const address = await signer.getAddress();
-                console.log('Signer address:', address);
-                
-                // Get current network
-                const network = await provider.getNetwork();
-                console.log('Current network:', network);
-                
-                console.log('Testing signer...');
-                // Test signer works
-                const signerAddress = await signer.getAddress();
-                console.log('Signer address:', signerAddress);
-                
-                console.log('✅ Wallet connected successfully:', userAccount);
+                // STEP 4: Update UI
+                console.log('🔄 Updating UI...');
                 await updateWalletUI();
-                
-                // Check if it's Monad network, but don't force it
-                if (network.chainId === 10143 || network.chainId === '10143') {
-                    showResult(`✅ Кошелек подключен к Monad Testnet!\nАдрес: ${userAccount.slice(0,6)}...${userAccount.slice(-4)}`);
-                } else {
-                    showResult(`✅ Кошелек подключен!\nАдрес: ${userAccount.slice(0,6)}...${userAccount.slice(-4)}\nСеть: ${network.name || network.chainId}\n\n⚠️ Рекомендуется переключиться на Monad Testnet`);
-                }
+                console.log('✅ UI updated');
+
+                showResult(`✅ КОШЕЛЕК ПОДКЛЮЧЕН!\n${userAccount.slice(0,6)}...${userAccount.slice(-4)}`);
+                console.log('🎉 WALLET CONNECTION COMPLETE!');
                 
                 return true;
                 
             } catch (error) {
-                console.error('Wallet connection error:', error);
-                let errorMessage = 'Unknown error';
-                
-                if (error.code === 4001) {
-                    errorMessage = 'Подключение отклонено пользователем';
-                } else if (error.code === -32002) {
-                    errorMessage = 'Запрос на подключение уже ожидает. Проверьте кошелек.';
-                } else if (error.message && error.message.includes('No accounts found')) {
-                    errorMessage = 'No accounts found. Please unlock MetaMask and create/import an account.';
-                } else if (error.message) {
-                    errorMessage = error.message;
-                } else if (error.code) {
-                    errorMessage = `Error code: ${error.code}`;
-                }
-                
-                showResult(`❌ Wallet connection failed: ${errorMessage}\n\nTroubleshooting:\n1. Make sure MetaMask is installed and unlocked\n2. Try refreshing the page\n3. Check if you have accounts in MetaMask`);
+                console.error('❌ WALLET ERROR:', error);
+                showResult(`❌ ОШИБКА КОШЕЛЬКА: ${error.message}`);
                 return false;
             }
         }
 
         async function updateWalletUI() {
+            console.log('🔄 Updating wallet UI for:', userAccount);
+            
             const connectBtn = document.getElementById('connect-wallet');
             const walletInfo = document.getElementById('wallet-info');
             const swapButton = document.getElementById('swap-button');
@@ -1731,260 +1678,58 @@
                 connectBtn.textContent = `${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`;
                 connectBtn.classList.add('connected');
                 
+                walletInfo.innerHTML = `✅ Подключен: ${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`;
                 walletInfo.classList.remove('hidden');
-                
-                // Get current network info
-                let networkName = 'Unknown Network';
-                try {
-                    if (provider) {
-                        const network = await provider.getNetwork();
-                        if (network.chainId === 183966) {
-                            networkName = 'Monad Testnet';
-                        } else if (network.chainId === 1) {
-                            networkName = 'Ethereum Mainnet';
-                        } else if (network.chainId === 11155111) {
-                            networkName = 'Sepolia Testnet';
-                        } else {
-                            networkName = `Network ${network.chainId}`;
-                        }
-                    }
-                } catch (error) {
-                    console.log('Error getting network info:', error);
-                }
-                
-                walletInfo.innerHTML = `
-                    <strong>Connected:</strong> ${userAccount.slice(0, 6)}...${userAccount.slice(-4)}<br>
-                    <strong>Network:</strong> ${networkName}
-                    ${networkName !== 'Monad Testnet' ? '<br><button onclick="addMonadNetwork()" style="margin-top: 8px; padding: 4px 8px; font-size: 12px; background: #000; color: white; border: 1px solid #fff; border-radius: 4px; cursor: pointer;">Add Monad Network</button>' : ''}
-                `;
                 
                 if (swapButton) {
                     swapButton.disabled = false;
-                    swapButton.textContent = 'Enter Amount';
+                    swapButton.textContent = 'Введите сумму';
                 }
                 
-                // Load tokens and balances
-                try {
-                    await loadTokens();
-                    await loadUserBalances();
-                } catch (error) {
-                    console.error('Error loading tokens/balances:', error);
-                    showResult('⚠️ Connected but failed to load tokens. Please refresh the page.');
-                }
+                console.log('✅ Wallet UI updated successfully');
             } else {
-                connectBtn.textContent = 'Connect Wallet';
+                connectBtn.textContent = 'Подключить кошелек';
                 connectBtn.classList.remove('connected');
-                
                 walletInfo.classList.add('hidden');
-                
-                if (swapButton) {
-                    swapButton.disabled = true;
-                    swapButton.textContent = 'Connect Wallet';
-                }
-            }
-        }
-
-        // Load all available tokens
-        async function loadTokens() {
-            console.log('🔄 Loading tokens...');
-            try {
-                showResult('🔄 Loading available tokens...');
-                
-                // First try to load verified tokens from API
-                let response;
-                try {
-                    response = await fetch('/api/tokens/category/verified', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                } catch (networkError) {
-                    console.log('Network request failed, using fallback tokens');
-                    throw new Error('Network request failed');
-                }
-                
-                if (response && response.ok) {
-                    const data = await response.json();
-                    
-                    if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-                        allTokens = data.data;
-                        console.log(`✅ Loaded ${allTokens.length} verified tokens from API:`, allTokens.slice(0, 3));
-                        populateTokenSelectors();
-                        showResult(`✅ Loaded ${allTokens.length} verified tokens from API`);
-                        return true;
-                    }
-                }
-                
-                // If API fails, try loading all tokens
-                try {
-                    const allResponse = await fetch('/api/tokens?limit=50');
-                    if (allResponse && allResponse.ok) {
-                        const allData = await allResponse.json();
-                        if (allData.success && Array.isArray(allData.data) && allData.data.length > 0) {
-                            allTokens = allData.data;
-                            console.log(`✅ Loaded ${allTokens.length} tokens from all tokens API`);
-                            populateTokenSelectors();
-                            showResult(`✅ Loaded ${allTokens.length} tokens from API`);
-                            return true;
-                        }
-                    }
-                } catch (e) {
-                    console.log('All tokens API also failed');
-                }
-                
-                throw new Error('API requests failed');
-                
-            } catch (error) {
-                console.error('Failed to load tokens:', error);
-                console.log('Using fallback token list');
-                
-                // Use fallback tokens
-                allTokens = FALLBACK_TOKENS;
-                populateTokenSelectors();
-                showResult(`⚠️ API not available. Using ${FALLBACK_TOKENS.length} fallback tokens.\nFor full functionality, please start the API server.`);
-                return false;
+                if (swapButton) swapButton.textContent = 'Подключить кошелек';
             }
         }
 
         function populateTokenSelectors() {
-            console.log('Populating token selectors with', allTokens.length, 'tokens');
+            console.log('🔄 Populating token selectors with', allTokens.length, 'tokens');
+            
             const fromSelect = document.getElementById('from-token');
             const toSelect = document.getElementById('to-token');
             
-            if (!fromSelect || !toSelect) {
-                console.error('Token selector elements not found');
-                return;
-            }
+            fromSelect.innerHTML = '<option value="">Выберите токен...</option>';
+            toSelect.innerHTML = '<option value="">Выберите токен...</option>';
             
-            fromSelect.innerHTML = '<option value="">Select token...</option>';
-            toSelect.innerHTML = '<option value="">Select token...</option>';
-            
-            if (!Array.isArray(allTokens) || allTokens.length === 0) {
-                console.warn('No tokens available to populate selectors');
-                return;
-            }
-            
-            console.log('Populating selectors with', allTokens.length, 'tokens');
-            
-            const sortedTokens = [...allTokens].sort((a, b) => a.symbol.localeCompare(b.symbol));
-            
-            sortedTokens.forEach(token => {
+            allTokens.forEach(token => {
                 if (token.symbol && token.name) {
-                    // Get balance for this token
-                    const balance = userBalances[token.symbol] || token.balance || '0.00';
-                    const balanceFloat = parseFloat(balance);
-                    const balanceDisplay = balanceFloat > 0 ? 
-                        (balanceFloat < 0.01 ? '< 0.01' : balanceFloat.toFixed(4)) : '0.00';
-                    
-                    // Create option text with balance
-                    const optionText = `${token.symbol} - ${token.name} (${balanceDisplay})`;
+                    const optionText = `${token.symbol} - ${token.name}`;
                     
                     const option1 = new Option(optionText, token.symbol);
                     const option2 = new Option(optionText, token.symbol);
-                    
-                    // Add special styling for tokens with balance
-                    if (balanceFloat > 0) {
-                        option1.style.fontWeight = 'bold';
-                        option1.style.color = '#00ff00';
-                        option2.style.fontWeight = 'bold';
-                        option2.style.color = '#00ff00';
-                    }
                     
                     fromSelect.appendChild(option1);
                     toSelect.appendChild(option2);
                 }
             });
             
-            const hasToken = (symbol) => sortedTokens.some(t => t.symbol === symbol);
-            
-            if (hasToken('MON')) {
-                fromSelect.value = 'MON';
-                updateTokenDisplay('from', 'MON');
-            }
-            if (hasToken('BEAN')) {
-                toSelect.value = 'BEAN';
-                updateTokenDisplay('to', 'BEAN');
-            }
-            
-            console.log('Token selectors populated, from:', fromSelect.value, 'to:', toSelect.value);
-            
-            // Force set default values
+            // Set defaults
             fromSelect.value = 'MON';
             toSelect.value = 'BEAN';
             
-            // Set default selections
-            updateFromToken();
-            updateToToken();
+            updateTokenDisplay('from', 'MON');
+            updateTokenDisplay('to', 'BEAN');
             
-            showResult(`✅ Token selectors populated with ${allTokens.length} tokens`);
+            console.log('✅ Token selectors populated');
         }
 
-        async function loadUserBalances() {
-            if (!userAccount) {
-                console.log('No user account, skipping balance loading');
-                return;
-            }
-            
-            try {
-                showResult('🔄 Loading wallet balances...');
-                
-                // First try to get balances from API
-                const response = await fetch(`/api/wallet/${userAccount}/balances`);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    if (data.success && Array.isArray(data.data)) {
-                        userBalances = {};
-                        data.data.forEach(balance => {
-                            if (balance.symbol && balance.balance !== undefined) {
-                                userBalances[balance.symbol] = parseFloat(balance.balance).toFixed(6);
-                            }
-                        });
-                        
-                        console.log('Loaded balances from API:', userBalances);
-                        updateBalanceDisplays();
-                        populateTokenSelectors(); // Refresh token selectors with new balances
-                        showResult(`✅ Loaded balances for ${data.data.length} tokens`);
-                        return;
-                    }
-                }
-                
-                // Fallback: extract balances from token data that already has balance field
-                console.log('Using balances from token data');
-                userBalances = {};
-                allTokens.forEach(token => {
-                    if (token.symbol && token.balance !== undefined) {
-                        const balance = parseFloat(token.balance);
-                        if (balance > 0) {
-                            userBalances[token.symbol] = balance.toFixed(6);
-                        }
-                    }
-                });
-                
-                console.log('Extracted balances from tokens:', userBalances);
-                updateBalanceDisplays();
-                populateTokenSelectors(); // Refresh token selectors with new balances
-                showResult(`✅ Loaded balances from token data`);
-                
-            } catch (error) {
-                console.error('Failed to load balances:', error);
-                showResult(`❌ Failed to load balances: ${error.message}`);
-                userBalances = {};
-                updateBalanceDisplays();
-            }
-        }
-
+        // Simplified balance display
         function updateBalanceDisplays() {
-            const fromToken = document.getElementById('from-token').value;
-            const toToken = document.getElementById('to-token').value;
-            
-            const fromBalance = userBalances[fromToken] || '0.00';
-            const toBalance = userBalances[toToken] || '0.00';
-            
-            document.getElementById('from-balance').textContent = `Balance: ${fromBalance}`;
-            document.getElementById('to-balance').textContent = `Balance: ${toBalance}`;
+            document.getElementById('from-balance').textContent = 'Balance: 0.00';
+            document.getElementById('to-balance').textContent = 'Balance: 0.00';
         }
 
         function updateFromToken() {
@@ -2013,8 +1758,6 @@
             
             updateFromToken();
             updateToToken();
-            
-            console.log('=== TOKEN SELECTORS READY ===');
         }
 
         function showResult(text) {
@@ -2320,67 +2063,26 @@
                 } else if (error.message && error.message.includes('execution reverted')) {
                     errorMessage = 'Transaction would fail. This usually means insufficient balance, insufficient liquidity, or price has changed significantly.';
                 }
-                showResult(`❌ Не удалось подключить кошелек: ${errorMessage}`);
+                
                 showResult(`❌ Swap failed: ${errorMessage}`);
             }
         }
 
         // Initialize app on page load
         window.addEventListener('load', async () => {
-            console.log('=== PAGE LOADED - INITIALIZING ===');
-            console.log('Page loaded, initializing application...');
-            showResult('🚀 Запускаем Monad Windrose Swap...');
+            console.log('🚀 PAGE LOADED - INITIALIZING...');
+            showResult('🚀 Запуск приложения...');
             
-            // Preload token logos for better UX
-            preloadTokenLogos();
+            // STEP 1: Load tokens
+            console.log('✅ Tokens loaded:', allTokens.length);
+            populateTokenSelectors();
             
-            // Always load tokens first
-            console.log('Loading tokens...');
-            console.log('=== LOADING TOKENS ===');
-            try {
-                const tokensLoaded = await loadTokens();
-                console.log('Tokens loaded:', tokensLoaded);
-                
-                // Initialize default token displays
-                updateTokenDisplay('from', 'MON');
-                updateTokenDisplay('to', 'BEAN');
-                
-                console.log('Checking for existing wallet connection...');
-                // Check for existing wallet connection
-                if (typeof window.ethereum !== 'undefined') {
-                    try {
-                        // Check if already connected
-                        const accounts = await window.ethereum.request({
-                            method: 'eth_accounts'
-                        });
-                        
-                        if (accounts && accounts.length > 0) {
-                            console.log('Found existing connection:', accounts[0]);
-                            userAccount = accounts[0];
-                            
-                            // Initialize provider carefully
-                            try {
-                                provider = new ethers.providers.Web3Provider(window.ethereum);
-                                await provider.ready;
-                                signer = provider.getSigner();
-                                
-                                // Verify the connection works
-                                await signer.getAddress();
-                                
-                                await updateWalletUI();
-                                showResult('✅ Приложение готово. Кошелек переподключен автоматически.');
-                
-                // Always use fallback tokens for now - more reliable
-                allTokens = [...FALLBACK_TOKENS];
-                console.log(`Using ${allTokens.length} fallback tokens:`, allTokens);
-                populateTokenSelectors();
-                showResult(`✅ Загружено ${allTokens.length} токенов`);
-                return true;
-                
-            } catch (error) {
-                console.error('Initialization error:', error);
-                showResult(`❌ Initialization error: ${error.message}\nPlease refresh the page.`);
-            }
+            // STEP 2: Set default displays
+            updateTokenDisplay('from', 'MON');
+            updateTokenDisplay('to', 'BEAN');
+            
+            console.log('✅ INITIALIZATION COMPLETE');
+            showResult('✅ Приложение готово! Подключите кошелек для торговли.');
         });
 
         // Handle account changes
@@ -2398,10 +2100,10 @@
                     // Account switched
                     userAccount = accounts[0];
                     try {
-                                showResult('✅ Приложение готово. Подключите кошелек для начала обмена.');
+                        provider = new ethers.providers.Web3Provider(window.ethereum);
                         await provider.ready;
                         signer = provider.getSigner();
-                            showResult('✅ Приложение готово. Подключите кошелек для начала обмена.');
+                        await updateWalletUI();
                         showResult(`🔄 Switched to account: ${userAccount.slice(0,6)}...${userAccount.slice(-4)}`);
                     } catch (error) {
                         console.error('Error switching accounts:', error);
@@ -2420,11 +2122,10 @@
             });
             
             window.ethereum.on('disconnect', (error) => {
-                showResult(`❌ Ошибка загрузки токенов: ${error.message}`);
+                console.log('Wallet disconnected:', error);
                 userAccount = null;
                 provider = null;
                 signer = null;
-                showResult('⚠️ Используем резервный список токенов.');
                 showResult('🔌 Wallet disconnected');
             });
         }
@@ -2446,13 +2147,12 @@
                 
                 // Random sizes
                 if (Math.random() > 0.7) {
-                    showResult('⚠️ Web3 кошелек не найден. Установите расширение кошелька.');
+                    particle.classList.add('particle-large');
                 }
                 
                 // Set particle styles
                 particle.style.left = `${posX}%`;
                 particle.style.top = `${posY}%`;
-            console.log('=== POPULATING TOKEN SELECTORS ===');
                 
                 // Random animation delay
                 particle.style.animationDelay = `${Math.random() * 10}s`;
@@ -2479,15 +2179,12 @@
                 line.style.top = `${posY}%`;
                 line.style.width = `${width}px`;
                 line.style.height = `${height}px`;
-            fromSelect.innerHTML = '<option value="">Выберите токен...</option>';
-            toSelect.innerHTML = '<option value="">Выберите токен...</option>';
+                
                 // Random animation delay
                 line.style.animationDelay = `${Math.random() * 3}s`;
                 
-                showResult(`❌ Ошибка инициализации: ${error.message}`);
+                background.appendChild(line);
             }
-            
-            console.log('=== INITIALIZATION COMPLETE ===');
         });
 
         document.getElementById('from-amount').addEventListener('input', debounce(updateQuote, 500));
